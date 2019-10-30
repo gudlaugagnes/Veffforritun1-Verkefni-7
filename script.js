@@ -41,12 +41,20 @@ function start() {
  * Þarf aðútfæra með lykkju og flæðisstýringum
  */
 function play() {
-  const random = randomNumber(1,100;
+  const correctNumb= randomNumber(1,100);
+  var cnt=0;
+  var guess=-1;
+  while(guess != correctNumb){
+    guess=prompt("Giskaðu á rétta tölu á bilinu 0 til 100.");
+    cnt++;
+  }
+  games.push(cnt);
+
 }
 
 /**
  * Skilar niðurstöðum um spilaða leiki sem streng.
- * Fjöldi liekja er skilað ásamt meðalfjölda giska, t.d.:
+ * Fjöldi leikja er skilað ásamt meðalfjölda giska, t.d.:
  *    "þú spilaðir 10 leiki
  *     Meðalfjöldi ágiskana var 5"
  * ATH að meðalfjöldi kemur í nýrri línu.
@@ -54,6 +62,9 @@ function play() {
  *    "Þú spilaðir engann leik >_<"
  */
 function getResults(){
+  if (games.length===0){return 'Þú spilaðir engan leik >_<';}
+  avg = calculateAverage();
+  return "Þú spilaðir "+games.length+" leiki. \n Meðalfjöldi ágiskana var"+avg;+".")
 
 }
 
@@ -66,14 +77,23 @@ function getResults(){
  * þarf að útfæra með lykkju.
  */
 function calculateAverage(){
+  var i;
+  var counter=0;
+  for (i = 0; i < games.length; i++) { 
+    counter += games[i] ;
+  }
+  var avg = counter/games.length;
+  return avg.toFixed(2);
 
 }
 
 /**
- * tekur in input sem streng og skilar þeirri tölu sem hægt er að ná þar úr.
+ * tekur inn input sem streng og skilar þeirri tölu sem hægt er að ná þar úr.
  * Ef ekki er hægt að ná tölu úr input er skilað null
  */
 function parseGuess(input){
+  if(isNaN(input)){ return null;}
+  return parseInt(input);
 
 }
 
@@ -93,7 +113,13 @@ function parseGuess(input){
  * Math.abs skilar algildi tölu: |a| = Math.abs(a)
  */
 function getResponse(guess, correct){
-  return 'Ekki rétt';
+  if(guess<0){return 'Ekki rétt';}
+  if(guess===correct){return 'Rétt';}
+  if(Math.abs(guess-correct < 5)){return 'Mjög nálægt';}
+  if(Math.abs(guess-correct < 10)){return 'Nálægt';}
+  if(Math.abs(guess-correct < 20)){return 'Frekar langt frá';}
+  if(Math.abs(guess-correct < 50)){return 'Langt frá';}
+  else {return 'Mjög langt frá';}
 }
 
 /**

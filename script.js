@@ -23,14 +23,19 @@
   * Ef notandi ýtir á "cancel" þá er sótt niðurstöður með getResults() og þær birtar með alert().
   */
 function start() {
-  play();
+  do{
+    play();
+  }
+  while(confirm("Viltu spila annan leik?"));
+  alert(getResults());
+  
 }
 
 /**
  * Spilar einn leik. Sér um að:
  *  - Velja tölu af handahófi í byrjun með randomNumber()
  *  - Biðja notanda um tölu með prompt()
- *  - Vinna úr intaki frá notanda með parseGuess()
+ *  - Vinna úr inntaki frá notanda með parseGuess()
  *  - Láta vita hversu nálægt eða rétt gisk er með getResponse() og alert()
  *  - Haldautan um fjölda ágiskana
  *  - Vista fjölda ágiskana í "games" fylki þegar búið er að giska rétt
@@ -44,11 +49,33 @@ function play() {
   const correctNumb= randomNumber(1,100);
   var cnt=0;
   var guess=-1;
-  while(guess != correctNumb){
+  while(guess !== correctNumb){
     guess=prompt("Giskaðu á rétta tölu á bilinu 0 til 100.");
-    cnt++;
+    if(guess===null){
+      alert("Hætt var í leik!")
+      return false;
+    }
+    if(guess===""){
+      alert("Úps! Ekkert var slegið inn.\nÞetta mun ekki teljast sem ágiskun :).\nReyndu aftur");
+      continue;
+    }
+    guess = parseGuess(guess);
+    if(guess===null || guess>100 || guess<0 ){
+      alert("Þetta er ekki tala á bilinu 0 til 100 \nÞetta telst sem ein ágiskun. :( \nReyndu aftur!");
+      cnt++;
+      continue;
+
+    }
+
+    else {
+      cnt++;
+      alert(getResponse(guess,correctNumb));
+    }
+
+
   }
   games.push(cnt);
+  return true;
 
 }
 
@@ -62,9 +89,13 @@ function play() {
  *    "Þú spilaðir engann leik >_<"
  */
 function getResults(){
-  if (games.length===0){return 'Þú spilaðir engan leik >_<';}
+  var gameLen = games.length;
+  if (gameLen==0){return 'Þú spilaðir engan leik >_<';}
   avg = calculateAverage();
-  return "Þú spilaðir "+games.length+" leiki. \n Meðalfjöldi ágiskana var"+avg;+".")
+  if(gameLen%10===1 && gameLen%100!==11){
+    return "Þú spilaðir "+games.length+" leik. \nMeðalfjöldi ágiskanna var "+avg;+".";
+  }
+  return "Þú spilaðir "+games.length+" leiki. \nMeðalfjöldi ágiskanna var "+avg;+".";
 
 }
 
@@ -115,10 +146,10 @@ function parseGuess(input){
 function getResponse(guess, correct){
   if(guess<0){return 'Ekki rétt';}
   if(guess===correct){return 'Rétt';}
-  if(Math.abs(guess-correct < 5)){return 'Mjög nálægt';}
-  if(Math.abs(guess-correct < 10)){return 'Nálægt';}
-  if(Math.abs(guess-correct < 20)){return 'Frekar langt frá';}
-  if(Math.abs(guess-correct < 50)){return 'Langt frá';}
+  if(Math.abs(guess-correct) < 5){return 'Mjög nálægt';}
+  if(Math.abs(guess-correct) < 10){return 'Nálægt';}
+  if(Math.abs(guess-correct) < 20){return 'Frekar langt frá';}
+  if(Math.abs(guess-correct) < 50){return 'Langt frá';}
   else {return 'Mjög langt frá';}
 }
 

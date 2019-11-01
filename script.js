@@ -56,7 +56,7 @@ function play() {
       return false;
     }
     if(guess===""){
-      alert("Úps! Ekkert var slegið inn.\nÞetta mun ekki teljast sem ágiskun :).\nReyndu aftur");
+      alert("Úps! Ekkert var slegið inn.\nÞetta mun ekki teljast sem ágiskun. :)\nReyndu aftur!");
       continue;
     }
     guess = parseGuess(guess);
